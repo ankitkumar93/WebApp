@@ -1,0 +1,23 @@
+{
+  "name": "webapp",
+  "version": "1.0.0",
+  "description": "WebApp for DevOps Project - Milestone 3",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ankitkumar93/WebApp.git"
+  },
+  "author": "Ankit Kumar, Ashutosh Chaturvedi, Vipul Kashyap",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ankitkumar93/WebApp/issues"
+  },
+  "homepage": "https://github.com/ankitkumar93/WebApp#readme",
+  "dependencies": {
+    "express": "^4.14.0",
+    "redis": "^2.6.3"
+  }
+}
