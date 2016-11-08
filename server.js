@@ -8,12 +8,14 @@
 // Imports
 const express = require('express');
 const redis = require('redis');
+const fs = require('fs');
+const publicIP = require('public-ip');
 
 // Globals
-const PORT = 80;
+const PORT = 8000;
 
 // Read Config File
-var config = require('./config.js');
+var config = JSON.parse(fs.readFileSync('config.json'));
 
 // Setup Express
 var app = express();
@@ -32,7 +34,11 @@ app.get('/', function(req, res) {
 });
 
 // Start HTTP Server
-app.listen(PORT, function() {
-		console.log("Server Up and Running on Port: " + PORT);
+var server = app.listen(PORT, function() {
+    console.log("Server Up and Running on Port: " + PORT);
+});
+
+publicIP.v4().then(ip => {
+    redisClient.lpush("production_servers", ip);
 });
 

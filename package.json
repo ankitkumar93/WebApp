@@ -18,6 +18,7 @@
   "homepage": "https://github.com/ankitkumar93/WebApp#readme",
   "dependencies": {
     "express": "^4.14.0",
+    "public-ip": "^2.0.1",
     "redis": "^2.6.3"
   }
 }
