@@ -12,7 +12,7 @@ const fs = require('fs');
 const publicIP = require('public-ip');
 
 // Globals
-const PORT = 8000;
+const PORT = 80;
 
 // Read Config File
 var config = JSON.parse(fs.readFileSync('config.json'));
