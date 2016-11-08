@@ -4,10 +4,8 @@ var config = require('./config.json')
 var app = express()
 
 var server = app.listen(3000, function () {
-  var host = server.address().address
-  var port = server.address().port
   console.log('Proxy server listening at http://%s:%s', host, port)
-})
+});
 
 var client = redis.createClient(6379, config.REDIS_IP, {});
 
@@ -43,5 +41,5 @@ app.get('/', function(req, res){
     }else{
       res.send("Error while getting canary_on flag from Redis server!");
     }
-	})
+	});
 });
