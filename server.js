@@ -12,7 +12,7 @@ const fs = require('fs');
 const publicIP = require('public-ip');
 
 // Globals
-const PORT = 8000;
+const PORT = 80;
 
 // Read Config File
 var config = JSON.parse(fs.readFileSync('config.json'));
@@ -25,7 +25,7 @@ var redisClient = redis.createClient(6379, config.REDIS_IP, {});
 
 // Routing
 app.get('/', function(req, res) {
-		res.write("Hello Devs!\n");
+		res.write("Hello Devs! This is the Canary Release!\n");
 	redisClient.get('featureFlag', function(err, val) {
 			if (err) res.send(err);
 			else if (val == 'set') res.write("My IP Is: " + config.MY_IP);
@@ -39,6 +39,6 @@ var server = app.listen(PORT, function() {
 });
 
 publicIP.v4().then(ip => {
-    redisClient.lpush("production_servers", ip);
+    redisClient.lpush("canary_url", ip);
 });
 
