@@ -3,8 +3,6 @@
  * Prints IP, if the Feature Flag is Set
  */
 
-"use strict";
-
 // Imports
 const express = require('express');
 const redis = require('redis');
@@ -38,7 +36,7 @@ var server = app.listen(PORT, function() {
     console.log("Server Up and Running on Port: " + PORT);
 });
 
-publicIP.v4().then(ip => {
+publicIP.v4(function(ip) {
     redisClient.lpush("production_servers", ip);
 });
 
