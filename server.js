@@ -3,8 +3,6 @@
  * Prints IP, if the Feature Flag is Set
  */
 
-"use strict";
-
 // Imports
 var express = require('express');
 var redis = require('redis');
