@@ -26,7 +26,7 @@ app.get('/', function(req, res) {
 		res.write("Hello Devs!\n");
 		redisClient.get('featureFlag', function(err, val) {
 				if (err) res.send(err);
-				else if (val == 'set') res.write("My IP Is: " + config.MY_IP);
+				else if (val == 'on') res.write("My IP Is: " + config.MY_IP);
 			   res.end();
 		});
 });
