@@ -23,7 +23,6 @@ app.get('/', function(req, res){
       counter++;
       //send every 4th request (25% traffic) to canary server
       if(routeToCanary && counter % 4 == 0){
-        console.log(counter);
         client.get("canary_url", function(error, canary_ip){
           if(!error){
             var canary_url = "http://" + canary_ip + ":" + port;
