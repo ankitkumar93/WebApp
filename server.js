@@ -7,7 +7,7 @@
 var express = require('express');
 var redis = require('redis');
 var fs = require('fs');
-var publicIP = require('external-ip')();
+var publicIP = require('externalip');
 var myIP;
 // Globals
 var PORT = 8080;
