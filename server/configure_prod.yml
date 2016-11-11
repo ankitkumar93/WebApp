@@ -43,7 +43,7 @@
     - name: Intall dependencies
       npm: path=/home/ubuntu/WebApp
     - name: "Start load_balancer.js app."
-      command: sudo forever start /home/ubuntu/WebApp/load_balancer.js
+      command: /usr/bin/forever start /home/ubuntu/WebApp/load_balancer.js
       when: "forever_list.stdout.find('/home/ubuntu/WebApp/load_balancer.js') == -1"
     - copy: src=./config.json dest=/home/ubuntu/WebApp/config.json mode="u=rwx,g=r,o=r"
 
@@ -66,9 +66,9 @@
     - name: install stress
       apt: pkg=stress state=installed
     - copy: src=./config.json dest=/home/ubuntu/config.json mode="u=rwx,g=rx,o=rx"
-    - copy: src=./monitor/monitor.sh dest=/home/ubuntu/monitor.sh mode=0777
-    - copy: src=./monitor/sendSMS.js dest=/home/ubuntu/sendSMS.js mode=0777
-    - copy: src=./monitor/package.json dest=/home/ubuntu/package.json mode=0777
+    - copy: src=./monitor.sh dest=/home/ubuntu/monitor.sh mode=0777
+    - copy: src=./sendSMS.js dest=/home/ubuntu/sendSMS.js mode=0777
+    - copy: src=./package.json dest=/home/ubuntu/package.json mode=0777
     - name: Install dependencies
       npm: path=/home/ubuntu/
     - name: "Install forever (to run server.js app)."
@@ -82,7 +82,7 @@
       register: forever_list
       changed_when: false
     - name: "Start server.js app."
-      command: sudo forever start /home/ubuntu/WebApp/server.js
+      command: /usr/bin/forever start /home/ubuntu/WebApp/server.js
       when: "forever_list.stdout.find('/home/ubuntu/WebApp/server.js') == -1"
     - name : "Move config.json to WebApp"
       command: mv /home/ubuntu/config.json /home/ubuntu/WebApp/config.json

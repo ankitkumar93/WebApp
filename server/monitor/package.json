@@ -9,5 +9,6 @@
   "author": "Ankit Kumar, Ashutosh Chaturvedi, Vipul Kashyap",
   "license": "ISC",
   "dependencies": {
+    "nodemailer": "^2.6.4"
   }
 }
