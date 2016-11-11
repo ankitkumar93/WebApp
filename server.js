@@ -3,16 +3,14 @@
  * Prints IP, if the Feature Flag is Set
  */
 
-"use strict";
-
 // Imports
-const express = require('express');
-const redis = require('redis');
-const fs = require('fs');
-const publicIP = require('public-ip');
-
+var express = require('express');
+var redis = require('redis');
+var fs = require('fs');
+var publicIP = require('externalip');
+var myIP;
 // Globals
-const PORT = 80;
+var PORT = 8080;
 
 // Read Config File
 var config = JSON.parse(fs.readFileSync('config.json'));
@@ -23,22 +21,22 @@ var app = express();
 // Setup Redis
 var redisClient = redis.createClient(6379, config.REDIS_IP, {});
 
+publicIP(function(error, ip) {
+		myIP = ip;
+		redisClient.set("canary_url", ip);
+});
+
 // Routing
 app.get('/', function(req, res) {
-		res.write("Hello Devs! This is the Canary Release!\n");
-	redisClient.get('featureFlag', function(err, val) {
-			if (err) res.send(err);
-			else if (val == 'set') res.write("My IP Is: " + config.MY_IP);
-		   res.end();	
-	});
+		res.write("Hello Devs!\n");
+		redisClient.get('featureFlag', function(err, val) {
+				if (err) res.send(err);
+				else if (val == 'on') res.write("My IP Is: " + myIP);
+			   res.end();
+		});
 });
 
 // Start HTTP Server
 var server = app.listen(PORT, function() {
     console.log("Server Up and Running on Port: " + PORT);
 });
-
-publicIP.v4().then(ip => {
-    redisClient.lpush("canary_url", ip);
-});
-

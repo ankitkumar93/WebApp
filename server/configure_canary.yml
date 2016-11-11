@@ -1,0 +1,60 @@
+---
+- hosts: appserver
+  become: yes
+  tasks:
+    - name: get latest packages
+      action: apt update_cache=yes
+    - name: Install jq
+      apt: name=jq update_cache=true state=latest
+    - name: Install npm
+      apt: name=npm state=installed update_cache=true state=latest
+    - name: Install nodejs
+      apt: name=nodejs update_cache=true state=latest
+    - name: Create symlink for nodejs
+      file: src=/usr/bin/nodejs dest=/usr/bin/node state=link
+    - name: Install git
+      apt: name=git update_cache=true state=latest
+    - name: install stress
+      apt: pkg=stress state=installed
+    - copy: src=./config.json dest=/home/ubuntu/config.json mode="u=rwx,g=rx,o=rx"
+    - copy: src=./monitor/monitor.sh dest=/home/ubuntu/monitor.sh mode=0777
+    - copy: src=./monitor/sendSMS.js dest=/home/ubuntu/sendSMS.js mode=0777
+    - copy: src=./monitor/package.json dest=/home/ubuntu/package.json mode=0777
+    - name: Install dependencies
+      npm: path=/home/ubuntu/
+    - name: "Install forever (to run server.js app)."
+      npm: name=forever global=yes state=present
+      name: Clone the git repo
+      git: repo=https://github.com/ankitkumar93/WebApp.git dest=/home/ubuntu/WebApp version=develop
+    - name: Intall dependencies
+      npm: path=/home/ubuntu/WebApp
+    - name: "Check list of server.js apps running."
+      command: forever list
+      register: forever_list
+      changed_when: false
+    - name: "Start server.js app."
+      command: sudo forever start /home/ubuntu/WebApp/server.js
+      when: "forever_list.stdout.find('/home/ubuntu/WebApp/server.js') == -1"
+    - name : Move config.json to WebApp
+      command: mv /home/ubuntu/config.json /home/ubuntu/WebApp/config.json
+    - name: Execute the monitoring script
+      command: bash /home/ubuntu/monitor_canary.sh
+      async: 2
+      poll: 0
+
+    - name: Export TWILIO_SID
+      lineinfile: dest=.bashrc line="export TWILIO_ACCOUNT_SID='{{ lookup('env','TWILIO_ACCOUNT_SID') }}'"
+    - name: Export TWILIO_TOKEN
+      lineinfile: dest=.bashrc line="export TWILIO_AUTH_TOKEN='{{ lookup('env','TWILIO_AUTH_TOKEN') }}'"
+    - name: Export MY_TWILIO_NO
+      lineinfile: dest=.bashrc line="export TWILIO_PHONE_NO='{{ lookup('env','TWILIO_PHONE_NO') }}'"
+    - name: Export MY_PHONE_NO
+      lineinfile: dest=.bashrc line="export RECIEVER_PHONE_NO='{{ lookup('env','RECIEVER_PHONE_NO') }}'"
+    - name: Source bashrc
+      shell: . ~/.bashrc
+      environment:
+        TWILIO_ACCOUNT_SID: "{{ lookup('env','TWILIO_ACCOUNT_SID') }}"
+        TWILIO_AUTH_TOKEN: "{{ lookup('env','TWILIO_AUTH_TOKEN') }}"
+        TWILIO_PHONE_NO: "{{ lookup('env','TWILIO_PHONE_NO') }}"
+        RECIEVER_PHONE_NO: "{{ lookup('env','RECIEVER_PHONE_NO') }}"
+    
