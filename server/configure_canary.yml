@@ -32,7 +32,7 @@
       command: /usr/local/bin/forever start /home/ubuntu/WebApp/server.js
       when: "forever_list.stdout.find('/home/ubuntu/WebApp/server.js') == -1"
     - name : "Move config.json to WebApp"
-      command: mv /home/ubuntu/config.json /home/ubuntu/WebApp/config.json
+      command: cp /home/ubuntu/config.json /home/ubuntu/WebApp/config.json
     - name: Execute the monitoring script
       command: bash /home/ubuntu/monitor.sh
       async: 2
