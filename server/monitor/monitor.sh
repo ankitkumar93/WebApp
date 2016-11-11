@@ -18,6 +18,8 @@ while [ true ]; do
 			echo $cpu_usage
 
 			node sendMail.js c
+
+			exit
 		fi
 
 		# Memory Usage
@@ -28,6 +30,8 @@ while [ true ]; do
 			echo $MEM_LIMIT
 
 			node sendMail.js m
+
+			exit
 		fi
 done
 
