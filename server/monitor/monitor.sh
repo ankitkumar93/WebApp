@@ -5,7 +5,7 @@
 CPU_LIMIT=50
 MEM_LIMIT=80
 ADMIN_EMAIL=""
-redis_ip=$(cat config.json | jq '.REDIS_IP')
+redis_ip=$(cat config.json | jq '.REDIS_IP' | tr '"')
 # Monitor
 # Reference Taken from : # http://stackoverflow.com/questions/9229333/how-to-get-overall-cpu-usage-e-g-57-on-linux
 while [ true ]; do

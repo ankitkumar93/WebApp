@@ -19,6 +19,8 @@ app.get('/', function(req, res){
 		if(!error){
       if(value == "true"){
         routeToCanary = true;
+      } else {
+        routeToCanary = false;
       }
       counter++;
       //send every 4th request (25% traffic) to canary server
