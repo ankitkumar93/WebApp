@@ -16,6 +16,8 @@
       apt: name=git update_cache=true state=latest
     - name: install stress
       apt: pkg=stress state=installed
+    - name: Install redis-tools
+      apt: name=redis-tools update_cache=true state=latest
     - copy: src=./config.json dest=/root/config.json mode="u=rwx,g=rx,o=rx"
     - copy: src=./monitor/monitor_canary.sh dest=/root/monitor.sh mode=0777
     - name: "Install forever (to run server.js app)."
