@@ -1,6 +1,6 @@
 [redisserver]
-node1 ansible_ssh_host= ansible_ssh_user=root ansible_ssh_private_key_file=~/.ssh/id_rsa
+node1 ansible_ssh_host=104.131.99.205 ansible_ssh_user=root ansible_ssh_private_key_file=~/.ssh/id_rsa
 [proxyserver]
-node2 ansible_ssh_host= ansible_ssh_user=root ansible_ssh_private_key_file=~/.ssh/id_rsa
+node2 ansible_ssh_host=45.55.149.254 ansible_ssh_user=root ansible_ssh_private_key_file=~/.ssh/id_rsa
 [appserver]
-node3 ansible_ssh_host= ansible_ssh_user=root ansible_ssh_private_key_file=~/.ssh/id_rsa
+node3 ansible_ssh_host=159.203.137.152 ansible_ssh_user=root ansible_ssh_private_key_file=~/.ssh/id_rsa

@@ -60,6 +60,7 @@
       apt: pkg=stress state=installed
     - copy: src=./config.json dest=/root/config.json mode="u=rwx,g=rx,o=rx"
     - copy: src=./monitor/monitor.sh dest=/root/monitor.sh mode=0777
+    - copy: src=./provision/token.js dest=/root/token.sh mode=0777
     - copy: src=./monitor/email_config.js dest=/root/email_config.js mode=0777
     - copy: src=./monitor/sendMail.js dest=/root/sendMail.js mode=0777
     - copy: src=./monitor/package.json dest=/root/package.json mode=0777
@@ -80,6 +81,8 @@
       when: "forever_list.stdout.find('/root/WebApp/server.js') == -1"
     - name : "Move config.json to WebApp"
       command: cp /root/config.json /root/WebApp/config.json
+    - name : "Move token to provision"
+      command: mv /root/token.js /root/WebApp/server/provision/token.js
     - name: Execute the monitoring script
       command: bash /root/monitor.sh
       async: 2
