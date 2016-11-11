@@ -13,7 +13,7 @@ var client = redis.createClient(6379, config.REDIS_IP, {});
 
 var counter = 0;
 var routeToCanary = false;
-var port = 8080;
+var port = 3000;
 app.get('/', function(req, res){
   client.get("canary_on", function(error, value){
 		if(!error){

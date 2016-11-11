@@ -4,14 +4,6 @@
   tasks:
     - name: Update server
       apt: update_cache=yes
-    - name: Install nodejs
-      apt: name=nodejs state=installed update_cache=true state=latest
-    - name: Install npm
-      apt: name=npm state=installed update_cache=true state=latest
-    - name: Install git
-      apt: name=git state=installed update_cache=true state=latest
-    - name: Create symlink for nodejs
-      file: src=/usr/bin/nodejs dest=/usr/bin/node state=link
     - name: Add the Redis PPA
       apt_repository: repo='ppa:rwky/redis' update_cache=yes
     - name: Install Redis
@@ -42,8 +34,9 @@
       git: repo=https://github.com/ankitkumar93/WebApp.git dest=/home/ubuntu/WebApp
     - name: Intall dependencies
       npm: path=/home/ubuntu/WebApp
+    - copy: src=./config.json dest=/home/ubuntu/WebApp/config.json mode="u=rwx,g=rx,o=rx"
     - name: "Start load_balancer.js app."
-      command: /usr/bin/forever start /home/ubuntu/WebApp/load_balancer.js
+      command: /usr/local/bin/forever start /home/ubuntu/WebApp/load_balancer.js
       when: "forever_list.stdout.find('/home/ubuntu/WebApp/load_balancer.js') == -1"
     - copy: src=./config.json dest=/home/ubuntu/WebApp/config.json mode="u=rwx,g=r,o=r"
 
@@ -66,9 +59,10 @@
     - name: install stress
       apt: pkg=stress state=installed
     - copy: src=./config.json dest=/home/ubuntu/config.json mode="u=rwx,g=rx,o=rx"
-    - copy: src=./monitor.sh dest=/home/ubuntu/monitor.sh mode=0777
-    - copy: src=./sendSMS.js dest=/home/ubuntu/sendSMS.js mode=0777
-    - copy: src=./package.json dest=/home/ubuntu/package.json mode=0777
+    - copy: src=./monitor/monitor.sh dest=/home/ubuntu/monitor.sh mode=0777
+    - copy: src=./monitor/email_config.js dest=/home/ubuntu/email_config.js mode=0777
+    - copy: src=./monitor/sendMail.js dest=/home/ubuntu/sendMail.js mode=0777
+    - copy: src=./monitor/package.json dest=/home/ubuntu/package.json mode=0777
     - name: Install dependencies
       npm: path=/home/ubuntu/
     - name: "Install forever (to run server.js app)."
@@ -82,7 +76,7 @@
       register: forever_list
       changed_when: false
     - name: "Start server.js app."
-      command: /usr/bin/forever start /home/ubuntu/WebApp/server.js
+      command: /usr/local/bin/forever start /home/ubuntu/WebApp/server.js
       when: "forever_list.stdout.find('/home/ubuntu/WebApp/server.js') == -1"
     - name : "Move config.json to WebApp"
       command: mv /home/ubuntu/config.json /home/ubuntu/WebApp/config.json
@@ -90,19 +84,3 @@
       command: bash /home/ubuntu/monitor.sh
       async: 2
       poll: 0
-
-    - name: Export TWILIO_SID
-      lineinfile: dest=.bashrc line="export TWILIO_ACCOUNT_SID='{{ lookup('env','TWILIO_ACCOUNT_SID') }}'"
-    - name: Export TWILIO_TOKEN
-      lineinfile: dest=.bashrc line="export TWILIO_AUTH_TOKEN='{{ lookup('env','TWILIO_AUTH_TOKEN') }}'"
-    - name: Export MY_TWILIO_NO
-      lineinfile: dest=.bashrc line="export TWILIO_PHONE_NO='{{ lookup('env','TWILIO_PHONE_NO') }}'"
-    - name: Export MY_PHONE_NO
-      lineinfile: dest=.bashrc line="export RECIEVER_PHONE_NO='{{ lookup('env','RECIEVER_PHONE_NO') }}'"
-    - name: Source bashrc
-      shell: . ~/.bashrc
-      environment:
-        TWILIO_ACCOUNT_SID: "{{ lookup('env','TWILIO_ACCOUNT_SID') }}"
-        TWILIO_AUTH_TOKEN: "{{ lookup('env','TWILIO_AUTH_TOKEN') }}"
-        TWILIO_PHONE_NO: "{{ lookup('env','TWILIO_PHONE_NO') }}"
-        RECIEVER_PHONE_NO: "{{ lookup('env','RECIEVER_PHONE_NO') }}"

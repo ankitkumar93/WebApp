@@ -17,7 +17,7 @@ while [ true ]; do
 		if [ $cpu_usage -gt $CPU_LIMIT ]; then
 			echo $cpu_usage
 
-			node sendSMS.js c
+			node sendMail.js c
 		fi
 
 		# Memory Usage
@@ -27,7 +27,7 @@ while [ true ]; do
 			echo $mem_use
 			echo $MEM_LIMIT
 
-			node sendSMS.js m
+			node sendMail.js m
 		fi
 done
 
