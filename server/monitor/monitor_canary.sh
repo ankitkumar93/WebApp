@@ -19,7 +19,6 @@ while [ true ]; do
 
             #set canary_on = false on redis server
             redis-cli -h redis_ip set canary_on false
-            node sendSMS.js -c
         fi
 
         # Memory Usage
@@ -30,7 +29,6 @@ while [ true ]; do
             echo $MEM_LIMIT
             #set canary_on = false on redis server
             redis-cli -h redis_ip set canary_on false
-            node sendSMS.js -m
         fi
 done
 

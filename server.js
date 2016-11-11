@@ -10,7 +10,7 @@ var fs = require('fs');
 var publicIP = require('externalip');
 var myIP;
 // Globals
-var PORT = 8080;
+var PORT = 3000;
 
 // Read Config File
 var config = JSON.parse(fs.readFileSync('config.json'));
