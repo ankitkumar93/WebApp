@@ -16,24 +16,24 @@
       apt: name=git update_cache=true state=latest
     - name: install stress
       apt: pkg=stress state=installed
-    - copy: src=./config.json dest=/home/ubuntu/config.json mode="u=rwx,g=rx,o=rx"
-    - copy: src=./monitor/monitor_canary.sh dest=/home/ubuntu/monitor.sh mode=0777
+    - copy: src=./config.json dest=/root/config.json mode="u=rwx,g=rx,o=rx"
+    - copy: src=./monitor/monitor_canary.sh dest=/root/monitor.sh mode=0777
     - name: "Install forever (to run server.js app)."
       npm: name=forever global=yes state=present
     - name: Clone the git repo
-      git: repo=https://github.com/ankitkumar93/WebApp.git dest=/home/ubuntu/WebApp version=develop
+      git: repo=https://github.com/ankitkumar93/WebApp.git dest=/root/WebApp version=develop
     - name: Intall dependencies
-      npm: path=/home/ubuntu/WebApp
+      npm: path=/root/WebApp
     - name: "Check list of server.js apps running."
       command: forever list
       register: forever_list
       changed_when: false
     - name: "Start server.js app."
-      command: /usr/local/bin/forever start /home/ubuntu/WebApp/server.js
-      when: "forever_list.stdout.find('/home/ubuntu/WebApp/server.js') == -1"
+      command: /usr/local/bin/forever start /root/WebApp/server.js
+      when: "forever_list.stdout.find('/root/WebApp/server.js') == -1"
     - name : "Move config.json to WebApp"
-      command: cp /home/ubuntu/config.json /home/ubuntu/WebApp/config.json
+      command: cp /root/config.json /root/WebApp/config.json
     - name: Execute the monitoring script
-      command: bash /home/ubuntu/monitor.sh
+      command: bash /root/monitor.sh
       async: 2
       poll: 0

@@ -11,14 +11,14 @@ redis_ip=$(cat config.json | jq '.REDIS_IP' | tr '"')
 while [ true ]; do
         # CPU Usage
         cpu_usage=$(top -bn1 | grep "Cpu(s)" | cut -d ',' -f4 | sed "s/\([0-9.]*\)* id/\1/" | sed -r "s/\s+//")
-        #cpu_usage = $(top -bn1 | grep "Cpu(s)" | sed "s/.*, *\([0-9.]*\)%* id.*/\1/" | awk '{print 100 - $1}')
         cpu_usage=${cpu_usage/.*}
-        cpu_usage=$((100-cpu_usage))
         if [ $cpu_usage -gt $CPU_LIMIT ]; then
             echo $cpu_usage
 
             #set canary_on = false on redis server
-            redis-cli -h redis_ip set canary_on false
+            redis-cli -h $redis_ip set canary_on false
+
+            exit
         fi
 
         # Memory Usage
@@ -28,7 +28,9 @@ while [ true ]; do
             echo $mem_use
             echo $MEM_LIMIT
             #set canary_on = false on redis server
-            redis-cli -h redis_ip set canary_on false
+            redis-cli -h $redis_ip set canary_on false
+
+            exit
         fi
 done
 
