@@ -29,7 +29,7 @@ publicIP(function(error, ip) {
 
 // Routing
 app.get('/', function(req, res) {
-		res.write("Hello Devs!\n");
+		res.write("Hello Devs! Its Canary!\n");
 		redisClient.get('featureFlag', function(err, val) {
 				if (err) res.send(err);
 				else if (val == 'on') res.write("My IP Is: " + myIP);
