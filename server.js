@@ -14,7 +14,7 @@ var myIP;
 var PORT = 3000;
 
 // Read Config File
-var config = JSON.parse(fs.readFileSync('config.json'));
+var config = JSON.parse(fs.readFileSync('/root/WebApp/config.json'));
 
 // Setup Express
 var app = express();
