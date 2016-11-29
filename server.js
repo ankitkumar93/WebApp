@@ -3,7 +3,6 @@
  * Prints IP, if the Feature Flag is Set
  * Test
  */
-// test fail
 
 // Imports
 var express = require('express');
